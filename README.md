@@ -1,2 +1,2 @@
 # Dockerfile
-Imagenes Docker
+Instalación: docker build . -t <nombre>:<versión>
