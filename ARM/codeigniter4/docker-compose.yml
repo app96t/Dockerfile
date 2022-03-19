@@ -1,0 +1,71 @@
+version: "3"
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#                         C O D E l G N I T E R                            #
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#  
+services:
+    codeigniter4:
+        image: codelgniter:v1
+#        image: atsanna/codeigniter4:v4.1.7-php7.4
+#        image: atsanna/codeigniter4:v4.1.7-php8.0
+        container_name: 'codelgniter4'
+        ports:
+          - 80:80
+        links:
+          - codeigniter4_mysql
+        volumes:
+          - code_data:/var/www/html
+
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#                               M Y S Q L                                  #
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#               
+    codeigniter4_mysql:
+        image: hypriot/rpi-mysql:latest
+        container_name: 'codelgniter_mysql'
+        ports:
+          - 3306:3306
+        volumes:
+          - db_data:/var/lib/mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: codeigniter4
+          MYSQL_USER: codeigniter4
+          MYSQL_PASSWORD: codeigniter4
+
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#                         P H P M Y A D M I N                              #
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#             
+    codeigniter4_phpmyadmin:
+        image: phpmyadmin:5.1.1
+        container_name: 'codelgniter_phpmyadmin'
+        links:
+          - codeigniter4_mysql
+        environment:
+          PMA_HOST: codeigniter4_mysql
+          PMA_PORT: 3306
+        ports:
+          - 9000:80
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#                              V O L U M E S                               #
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#  
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /media/pi/USB/Docker/App/BBDD
+  code_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /media/pi/USB/Docker/App/App1
